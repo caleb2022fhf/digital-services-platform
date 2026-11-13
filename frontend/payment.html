@@ -1,0 +1,207 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Payment | Digital Services</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #080d18;
+            color: white;
+            min-height: 100vh;
+        }
+
+        header {
+            padding: 22px 8%;
+            background: #101a2c;
+            border-bottom: 1px solid #26344b;
+        }
+
+        .logo {
+            color: #00d9ff;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 550px;
+            margin: 55px auto;
+            padding: 35px;
+            background: #111d30;
+            border: 1px solid #263b57;
+            border-radius: 15px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .description {
+            color: #b8c5d8;
+            text-align: center;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        label {
+            display: block;
+            margin: 18px 0 9px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #344761;
+            border-radius: 8px;
+            background: #080d18;
+            color: white;
+            outline: none;
+            font-size: 15px;
+        }
+
+        input:focus, select:focus {
+            border-color: #00d9ff;
+        }
+
+        .selected-service {
+            background: #080d18;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #00d9ff;
+            margin-bottom: 20px;
+        }
+
+        .selected-service span {
+            color: #00d9ff;
+            font-weight: bold;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            margin-top: 25px;
+            border: none;
+            border-radius: 8px;
+            background: #00c9ed;
+            color: #06111e;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #00a9cc;
+        }
+
+        .notice {
+            color: #b8c5d8;
+            font-size: 13px;
+            line-height: 1.6;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back {
+            display: block;
+            text-align: center;
+            margin-top: 22px;
+            color: #00d9ff;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">Digital Services</div>
+    </header>
+
+    <main class="container">
+
+        <h1>Checkout</h1>
+
+        <p class="description">
+            Enter your details to prepare your digital service order.
+        </p>
+
+        <div class="selected-service">
+            Selected service:
+            <span id="serviceName">No service selected</span>
+        </div>
+
+        <form id="paymentForm">
+
+            <label for="customerName">Full Name</label>
+            <input
+                type="text"
+                id="customerName"
+                placeholder="Enter your full name"
+                required
+            >
+
+            <label for="customerEmail">Email Address</label>
+            <input
+                type="email"
+                id="customerEmail"
+                placeholder="Enter your email"
+                required
+            >
+
+            <label for="phoneNumber">MoMo Phone Number</label>
+            <input
+                type="tel"
+                id="phoneNumber"
+                placeholder="e.g. 0780000000"
+                pattern="07[2389][0-9]{7}"
+                required
+            >
+
+            <label for="paymentMethod">Payment Method</label>
+            <select id="paymentMethod" required>
+                <option value="">Choose payment method</option>
+                <option value="MTN MoMo">MTN MoMo</option>
+                <option value="Airtel Money">Airtel Money</option>
+            </select>
+
+            <button type="submit">Prepare My Order</button>
+
+        </form>
+
+        <p class="notice">
+            Your payment will only be confirmed after verification
+            by the payment provider. Never share your MoMo PIN.
+        </p>
+
+        <a href="services.html" class="back">← Back to Services</a>
+
+    </main>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const service = params.get("service");
+
+        document.getElementById("serviceName").textContent =
+            service || "No service selected";
+
+        document.getElementById("paymentForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            alert("Your order form is ready. Actual MoMo payment integration will be connected in a later step.");
+        });
+    </script>
+
+</body>
+</html>
