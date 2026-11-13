@@ -1,0 +1,194 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Discover and purchase digital services online.">
+    <title>Digital Services | Home</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #080d18;
+            color: white;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 22px 8%;
+            background: #101a2c;
+            border-bottom: 1px solid #26344b;
+        }
+
+        .logo {
+            color: #00d9ff;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 25px;
+            font-size: 15px;
+        }
+
+        nav a:hover {
+            color: #00d9ff;
+        }
+
+        .hero {
+            min-height: 75vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 50px 20px;
+            background: radial-gradient(circle at top, #16375c, #080d18 65%);
+        }
+
+        .hero h1 {
+            font-size: clamp(35px, 6vw, 60px);
+            max-width: 850px;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 span {
+            color: #00d9ff;
+        }
+
+        .hero p {
+            color: #b8c5d8;
+            font-size: 18px;
+            line-height: 1.7;
+            max-width: 650px;
+            margin-bottom: 30px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 15px 30px;
+            background: #00c9ed;
+            color: #06111e;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .button:hover {
+            background: #00a9cc;
+            transform: translateY(-3px);
+        }
+
+        .features {
+            padding: 55px 8%;
+            text-align: center;
+        }
+
+        .features h2 {
+            font-size: 30px;
+            margin-bottom: 35px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .feature {
+            background: #111d30;
+            border: 1px solid #263b57;
+            border-radius: 12px;
+            padding: 30px 20px;
+        }
+
+        .feature h3 {
+            color: #00d9ff;
+            margin-bottom: 12px;
+        }
+
+        .feature p {
+            color: #b8c5d8;
+            line-height: 1.6;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            background: #101a2c;
+            color: #aab8cc;
+            margin-top: 30px;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                gap: 18px;
+            }
+
+            nav a {
+                margin: 0 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">Digital Services</div>
+
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="services.html">Services</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>Your Digital Services, <span>All in One Place</span></h1>
+
+        <p>
+            Discover useful digital services, choose what you need,
+            and pay securely online using Mobile Money.
+        </p>
+
+        <a href="services.html" class="button">Explore Services</a>
+    </section>
+
+    <section class="features">
+        <h2>Why Choose Us?</h2>
+
+        <div class="feature-grid">
+            <div class="feature">
+                <h3>Digital Services</h3>
+                <p>Access useful digital services from one convenient platform.</p>
+            </div>
+
+            <div class="feature">
+                <h3>MoMo Payments</h3>
+                <p>Pay for your selected services using supported Mobile Money methods.</p>
+            </div>
+
+            <div class="feature">
+                <h3>Easy Access</h3>
+                <p>Choose a service and follow the steps to receive it after payment confirmation.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Digital Services. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
