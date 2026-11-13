@@ -189,19 +189,6 @@
 
     </main>
 
-    <script>
-        const params = new URLSearchParams(window.location.search);
-        const service = params.get("service");
-
-        document.getElementById("serviceName").textContent =
-            service || "No service selected";
-
-        document.getElementById("paymentForm").addEventListener("submit", function(event) {
-            event.preventDefault();
-
-            alert("Your order form is ready. Actual MoMo payment integration will be connected in a later step.");
-        });
-    </script>
-
+    <script src="js/payment.js"></script>
 </body>
 </html>
