@@ -1,0 +1,190 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Services | Digital Services</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #080d18;
+            color: white;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 22px 8%;
+            background: #101a2c;
+            border-bottom: 1px solid #26344b;
+        }
+
+        .logo {
+            color: #00d9ff;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+
+        nav a:hover {
+            color: #00d9ff;
+        }
+
+        .intro {
+            text-align: center;
+            padding: 60px 20px 35px;
+        }
+
+        .intro h1 {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .intro h1 span {
+            color: #00d9ff;
+        }
+
+        .intro p {
+            color: #b8c5d8;
+            line-height: 1.7;
+        }
+
+        .services {
+            padding: 30px 8% 70px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 25px;
+        }
+
+        .service-card {
+            background: #111d30;
+            border: 1px solid #263b57;
+            padding: 30px 25px;
+            border-radius: 14px;
+            transition: 0.3s;
+        }
+
+        .service-card:hover {
+            transform: translateY(-6px);
+            border-color: #00d9ff;
+        }
+
+        .service-icon {
+            font-size: 40px;
+            margin-bottom: 20px;
+        }
+
+        .service-card h2 {
+            color: #00d9ff;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .service-card p {
+            color: #b8c5d8;
+            line-height: 1.7;
+            margin-bottom: 22px;
+        }
+
+        .price {
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .buy-button {
+            display: block;
+            text-align: center;
+            padding: 13px;
+            background: #00c9ed;
+            color: #06111e;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 8px;
+        }
+
+        .buy-button:hover {
+            background: #00a9cc;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            background: #101a2c;
+            color: #aab8cc;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                gap: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">Digital Services</div>
+
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="services.html">Services</a>
+        </nav>
+    </header>
+
+    <section class="intro">
+        <h1>Our <span>Digital Services</span></h1>
+        <p>Choose the digital service you need.</p>
+    </section>
+
+    <section class="services">
+
+        <div class="service-card">
+            <div class="service-icon">💻</div>
+            <h2>Website Services</h2>
+            <p>Digital solutions for websites and online businesses.</p>
+            <div class="price">Price: To be announced</div>
+            <a href="payment.html?service=Website%20Services" class="buy-button">Buy Service</a>
+        </div>
+
+        <div class="service-card">
+            <div class="service-icon">🎨</div>
+            <h2>Graphic Design</h2>
+            <p>Creative digital designs for personal and business needs.</p>
+            <div class="price">Price: To be announced</div>
+            <a href="payment.html?service=Graphic%20Design" class="buy-button">Buy Service</a>
+        </div>
+
+        <div class="service-card">
+            <div class="service-icon">📄</div>
+            <h2>Document Services</h2>
+            <p>Digital document preparation and formatting services.</p>
+            <div class="price">Price: To be announced</div>
+            <a href="payment.html?service=Document%20Services" class="buy-button">Buy Service</a>
+        </div>
+
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Digital Services. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
