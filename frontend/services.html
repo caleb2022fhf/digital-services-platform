@@ -122,6 +122,14 @@
             background: #00a9cc;
         }
 
+        .message {
+            grid-column: 1 / -1;
+            text-align: center;
+            color: #b8c5d8;
+            padding: 30px;
+            line-height: 1.7;
+        }
+
         footer {
             text-align: center;
             padding: 25px;
@@ -133,6 +141,10 @@
             header {
                 flex-direction: column;
                 gap: 18px;
+            }
+
+            .intro h1 {
+                font-size: 32px;
             }
         }
     </style>
@@ -154,37 +166,79 @@
         <p>Choose the digital service you need.</p>
     </section>
 
-    <section class="services">
-
-        <div class="service-card">
-            <div class="service-icon">💻</div>
-            <h2>Website Services</h2>
-            <p>Digital solutions for websites and online businesses.</p>
-            <div class="price">Price: To be announced</div>
-            <a href="payment.html?service=Website%20Services" class="buy-button">Buy Service</a>
-        </div>
-
-        <div class="service-card">
-            <div class="service-icon">🎨</div>
-            <h2>Graphic Design</h2>
-            <p>Creative digital designs for personal and business needs.</p>
-            <div class="price">Price: To be announced</div>
-            <a href="payment.html?service=Graphic%20Design" class="buy-button">Buy Service</a>
-        </div>
-
-        <div class="service-card">
-            <div class="service-icon">📄</div>
-            <h2>Document Services</h2>
-            <p>Digital document preparation and formatting services.</p>
-            <div class="price">Price: To be announced</div>
-            <a href="payment.html?service=Document%20Services" class="buy-button">Buy Service</a>
-        </div>
-
+    <section class="services" id="servicesList">
+        <p class="message">Loading services...</p>
     </section>
 
     <footer>
         <p>&copy; 2026 Digital Services. All rights reserved.</p>
     </footer>
+
+    <script>
+        async function loadServices() {
+            const container = document.getElementById("servicesList");
+
+            try {
+                const response = await fetch("/api/services");
+                const result = await response.json();
+
+                if (!response.ok || !result.success) {
+                    throw new Error("Unable to load services.");
+                }
+
+                container.innerHTML = "";
+
+                if (!result.services || result.services.length === 0) {
+                    container.innerHTML =
+                        '<p class="message">No services available yet. Please check again later.</p>';
+                    return;
+                }
+
+                result.services.forEach(service => {
+                    const card = document.createElement("div");
+                    card.className = "service-card";
+
+                    const icon = document.createElement("div");
+                    icon.className = "service-icon";
+                    icon.textContent = "💻";
+
+                    const title = document.createElement("h2");
+                    title.textContent = service.name;
+
+                    const description = document.createElement("p");
+                    description.textContent =
+                        service.description || "Digital service available.";
+
+                    const price = document.createElement("div");
+                    price.className = "price";
+                    price.textContent =
+                        Number(service.price_rwf).toLocaleString("en-US") + " RWF";
+
+                    const buyButton = document.createElement("a");
+                    buyButton.className = "buy-button";
+                    buyButton.textContent = "Buy Service";
+                    buyButton.href =
+                        "payment.html?service=" + encodeURIComponent(service.id);
+
+                    card.appendChild(icon);
+                    card.appendChild(title);
+                    card.appendChild(description);
+                    card.appendChild(price);
+                    card.appendChild(buyButton);
+
+                    container.appendChild(card);
+                });
+
+            } catch (error) {
+                console.error("Services loading error:", error);
+
+                container.innerHTML =
+                    '<p class="message">Unable to load services. Please try again later.</p>';
+            }
+        }
+
+        loadServices();
+    </script>
 
 </body>
 </html>
