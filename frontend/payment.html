@@ -81,11 +81,23 @@
             border-radius: 8px;
             border-left: 4px solid #00d9ff;
             margin-bottom: 20px;
+            line-height: 1.8;
         }
 
         .selected-service span {
             color: #00d9ff;
             font-weight: bold;
+        }
+
+        #servicePrice {
+            color: #00ff9d;
+            font-size: 18px;
+        }
+
+        #serviceMessage {
+            color: #b8c5d8;
+            font-size: 13px;
+            margin-top: 8px;
         }
 
         button {
@@ -103,6 +115,11 @@
 
         button:hover {
             background: #00a9cc;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
         .notice {
@@ -139,7 +156,14 @@
 
         <div class="selected-service">
             Selected service:
-            <span id="serviceName">No service selected</span>
+            <span id="serviceName">Loading service...</span>
+
+            <br>
+
+            Price:
+            <span id="servicePrice">Loading...</span>
+
+            <p id="serviceMessage"></p>
         </div>
 
         <form id="paymentForm">
@@ -176,7 +200,9 @@
                 <option value="Airtel Money">Airtel Money</option>
             </select>
 
-            <button type="submit">Prepare My Order</button>
+            <button type="submit" id="submitButton" disabled>
+                Prepare My Order
+            </button>
 
         </form>
 
