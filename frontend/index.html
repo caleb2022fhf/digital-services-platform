@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Discover and purchase digital services online.">
     <title>Digital Services | Home</title>
+
     <style>
         * {
             margin: 0;
@@ -34,15 +35,44 @@
             font-weight: bold;
         }
 
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
         nav a {
             color: white;
             text-decoration: none;
-            margin-left: 25px;
             font-size: 15px;
         }
 
         nav a:hover {
             color: #00d9ff;
+        }
+
+        .admin-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            border: 1px solid #00d9ff;
+            border-radius: 50%;
+            color: #00d9ff;
+            transition: 0.3s;
+        }
+
+        .admin-icon:hover {
+            background: #00d9ff;
+            color: #080d18;
+            box-shadow: 0 0 15px #00d9ff;
+            transform: scale(1.08);
+        }
+
+        .admin-icon svg {
+            width: 22px;
+            height: 22px;
         }
 
         .hero {
@@ -137,12 +167,13 @@
                 gap: 18px;
             }
 
-            nav a {
-                margin: 0 8px;
+            nav {
+                gap: 18px;
             }
         }
     </style>
 </head>
+
 <body>
 
     <header>
@@ -151,6 +182,22 @@
         <nav>
             <a href="index.html">Home</a>
             <a href="services.html">Services</a>
+
+            <a href="admin.html" class="admin-icon"
+               title="Administrator Login"
+               aria-label="Administrator Login">
+
+                <svg viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round">
+
+                    <path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z"/>
+                    <path d="m9 12 2 2 4-4"/>
+                </svg>
+
+            </a>
         </nav>
     </header>
 
@@ -169,6 +216,7 @@
         <h2>Why Choose Us?</h2>
 
         <div class="feature-grid">
+
             <div class="feature">
                 <h3>Digital Services</h3>
                 <p>Access useful digital services from one convenient platform.</p>
@@ -183,6 +231,7 @@
                 <h3>Easy Access</h3>
                 <p>Choose a service and follow the steps to receive it after payment confirmation.</p>
             </div>
+
         </div>
     </section>
 
