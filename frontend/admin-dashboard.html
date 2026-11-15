@@ -1,95 +1,343 @@
 
-import { supabase } from "../lib/supabase.js";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digital Services - Admin Dashboard</title>
 
-export default async function handler(req, res) {
-    if (req.method !== "GET") {
-        return res.status(405).json({
-            success: false,
-            message: "Method not allowed."
-        });
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #080808;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+header {
+    background: #111;
+    padding: 20px;
+    border-bottom: 1px solid #292929;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+header h2 {
+    color: #00ffff;
+}
+
+button {
+    background: #00ffff;
+    color: #000;
+    border: none;
+    padding: 11px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+main {
+    max-width: 1200px;
+    margin: auto;
+    padding: 25px;
+}
+
+#welcome {
+    color: #aaa;
+    margin-bottom: 25px;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+    margin-bottom: 35px;
+}
+
+.stat-card {
+    background: #151515;
+    border: 1px solid #292929;
+    border-radius: 10px;
+    padding: 22px;
+}
+
+.stat-card h3 {
+    color: #aaa;
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+.stat-card p {
+    color: #00ffff;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+section {
+    margin-bottom: 35px;
+}
+
+section h2 {
+    margin-bottom: 15px;
+    color: #00ffff;
+}
+
+.table-container {
+    overflow-x: auto;
+    background: #151515;
+    border-radius: 10px;
+    border: 1px solid #292929;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 650px;
+}
+
+th, td {
+    padding: 14px;
+    text-align: left;
+    border-bottom: 1px solid #292929;
+    font-size: 14px;
+}
+
+th {
+    color: #00ffff;
+    background: #1d1d1d;
+}
+
+td {
+    color: #ddd;
+}
+
+#message {
+    margin: 20px 0;
+    color: #00ffff;
+}
+
+@media(max-width: 500px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
     }
 
-    try {
-        const authorization = req.headers.authorization;
-
-        if (!authorization || !authorization.startsWith("Bearer ")) {
-            return res.status(401).json({
-                success: false,
-                message: "Authentication required."
-            });
-        }
-
-        const token = authorization.substring(7);
-
-        const { data: authData, error: authError } =
-            await supabase.auth.getUser(token);
-
-        if (authError || !authData.user) {
-            return res.status(401).json({
-                success: false,
-                message: "Invalid or expired session."
-            });
-        }
-
-        const user = authData.user;
-
-        const { data: admin, error: adminError } = await supabase
-            .from("admin_users")
-            .select("role")
-            .eq("user_id", user.id)
-            .maybeSingle();
-
-        if (adminError || !admin || admin.role !== "admin") {
-            return res.status(403).json({
-                success: false,
-                message: "Access denied. Admin only."
-            });
-        }
-
-        const [
-            servicesResult,
-            ordersResult,
-            pendingResult,
-            paidResult
-        ] = await Promise.all([
-            supabase.from("services").select("*", { count: "exact" }),
-            supabase.from("orders").select("*", { count: "exact" }),
-            supabase.from("orders")
-                .select("*", { count: "exact", head: true })
-                .eq("payment_status", "PENDING"),
-            supabase.from("orders")
-                .select("*", { count: "exact", head: true })
-                .eq("payment_status", "PAID")
-        ]);
-
-        if (
-            servicesResult.error ||
-            ordersResult.error ||
-            pendingResult.error ||
-            paidResult.error
-        ) {
-            throw new Error("Unable to retrieve dashboard data.");
-        }
-
-        return res.status(200).json({
-            success: true,
-            adminEmail: user.email,
-            statistics: {
-                totalServices: servicesResult.count || 0,
-                totalOrders: ordersResult.count || 0,
-                pendingOrders: pendingResult.count || 0,
-                paidOrders: paidResult.count || 0
-            },
-            services: servicesResult.data || [],
-            orders: ordersResult.data || []
-        });
-
-    } catch (error) {
-        console.error("Admin dashboard error:", error);
-
-        return res.status(500).json({
-            success: false,
-            message: "Unable to load admin dashboard."
-        });
+    main {
+        padding: 15px;
     }
 }
+</style>
+</head>
+
+<body>
+
+<header>
+    <h2>Digital Services Admin</h2>
+    <button id="logoutButton">Logout</button>
+</header>
+
+<main>
+
+    <h1>Dashboard Overview</h1>
+    <p id="welcome">Checking administrator account...</p>
+
+    <p id="message">Loading dashboard data...</p>
+
+    <div class="stats">
+
+        <div class="stat-card">
+            <h3>Total Services</h3>
+            <p id="totalServices">0</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Total Orders</h3>
+            <p id="totalOrders">0</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Pending Orders</h3>
+            <p id="pendingOrders">0</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Paid Orders</h3>
+            <p id="paidOrders">0</p>
+        </div>
+
+    </div>
+
+    <section>
+        <h2>Services</h2>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Service Name</th>
+                        <th>Description</th>
+                        <th>Price</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="servicesTable">
+                    <tr><td colspan="4">Loading services...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section>
+        <h2>Customer Orders</h2>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Customer</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Service</th>
+                        <th>Amount</th>
+                        <th>Payment Method</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="ordersTable">
+                    <tr><td colspan="7">Loading orders...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+</main>
+
+<script>
+const SUPABASE_URL = "https://wewwtcamaymmtylzodxn.supabase.co";
+
+const SUPABASE_KEY = "sb_publishable_irQEjAWhLlqDoVZIJAhnzQ_hLyOa8Qv";
+
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+const message = document.getElementById("message");
+
+function safe(value) {
+    const element = document.createElement("span");
+    element.textContent = value ?? "";
+    return element.innerHTML;
+}
+
+async function loadDashboard() {
+    try {
+        const { data: sessionData, error: sessionError } =
+            await supabaseClient.auth.getSession();
+
+        if (sessionError || !sessionData.session) {
+            window.location.replace("admin.html");
+            return;
+        }
+
+        const session = sessionData.session;
+
+        document.getElementById("welcome").textContent =
+            "Welcome, " + (session.user.email || "Administrator");
+
+        const response = await fetch("/api/admin-dashboard", {
+            headers: {
+                "Authorization": "Bearer " + session.access_token
+            }
+        });
+
+        const result = await response.json();
+
+        if (response.status === 401 || response.status === 403) {
+            message.textContent = result.message || "Access denied.";
+            return;
+        }
+
+        if (!response.ok || !result.success) {
+            throw new Error(result.message || "Dashboard loading failed.");
+        }
+
+        document.getElementById("totalServices").textContent =
+            result.statistics.totalServices;
+
+        document.getElementById("totalOrders").textContent =
+            result.statistics.totalOrders;
+
+        document.getElementById("pendingOrders").textContent =
+            result.statistics.pendingOrders;
+
+        document.getElementById("paidOrders").textContent =
+            result.statistics.paidOrders;
+
+        const servicesTable = document.getElementById("servicesTable");
+
+        if (!result.services.length) {
+            servicesTable.innerHTML =
+                '<tr><td colspan="4">No services found.</td></tr>';
+        } else {
+            servicesTable.innerHTML = result.services.map(service => `
+                <tr>
+                    <td>${safe(service.name)}</td>
+                    <td>${safe(service.description || "")}</td>
+                    <td>${Number(service.price_rwf).toLocaleString()} RWF</td>
+                    <td>${service.is_active ? "Active" : "Inactive"}</td>
+                </tr>
+            `).join("");
+        }
+
+        const ordersTable = document.getElementById("ordersTable");
+
+        if (!result.orders.length) {
+            ordersTable.innerHTML =
+                '<tr><td colspan="7">No customer orders yet.</td></tr>';
+        } else {
+            ordersTable.innerHTML = result.orders.map(order => `
+                <tr>
+                    <td>${safe(order.customer_name)}</td>
+                    <td>${safe(order.customer_email)}</td>
+                    <td>${safe(order.phone_number)}</td>
+                    <td>${safe(order.service_name)}</td>
+                    <td>${Number(order.amount_rwf).toLocaleString()} RWF</td>
+                    <td>${safe(order.payment_method)}</td>
+                    <td>${safe(order.payment_status)}</td>
+                </tr>
+            `).join("");
+        }
+
+        message.textContent = "Dashboard loaded successfully.";
+
+    } catch (error) {
+        console.error(error);
+        message.textContent = error.message ||
+            "Unable to load dashboard.";
+    }
+}
+
+document.getElementById("logoutButton").addEventListener("click", async () => {
+    await supabaseClient.auth.signOut();
+    window.location.replace("admin.html");
+});
+
+loadDashboard();
+</script>
+
+</body>
+</html>
