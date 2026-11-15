@@ -184,10 +184,11 @@ loginForm.addEventListener("submit", async function(event) {
         }
 
         message.style.color = "#00ff88";
-        message.textContent =
-            "Admin login successful! Your account is verified.";
+        message.textContent = "Verified! Opening dashboard...";
 
         loginButton.textContent = "Verified";
+
+        window.location.replace("admin-dashboard.html");
 
     } catch (error) {
 
