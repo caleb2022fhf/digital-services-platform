@@ -39,7 +39,7 @@ button {
     background: #00ffff;
     color: #000;
     border: none;
-    padding: 11px 18px;
+    padding: 12px 18px;
     border-radius: 6px;
     cursor: pointer;
     font-weight: bold;
@@ -47,6 +47,11 @@ button {
 
 button:hover {
     opacity: 0.8;
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 main {
@@ -57,7 +62,7 @@ main {
 
 #welcome {
     color: #aaa;
-    margin-bottom: 25px;
+    margin: 10px 0 25px;
 }
 
 .stats {
@@ -91,8 +96,72 @@ section {
 }
 
 section h2 {
-    margin-bottom: 15px;
+    margin-bottom: 18px;
     color: #00ffff;
+}
+
+#message {
+    margin: 20px 0;
+    color: #00ffff;
+}
+
+.form-container {
+    background: #151515;
+    padding: 25px;
+    border: 1px solid #292929;
+    border-radius: 10px;
+    max-width: 700px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    color: #ddd;
+    margin-bottom: 9px;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 13px;
+    background: #080808;
+    color: white;
+    border: 1px solid #444;
+    border-radius: 6px;
+    outline: none;
+    font-family: Arial, sans-serif;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #00ffff;
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+.active-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    color: #ddd;
+}
+
+.active-option input {
+    width: 17px;
+    height: 17px;
+    accent-color: #00ffff;
+}
+
+#addServiceMessage {
+    margin-top: 15px;
+    font-size: 14px;
+    line-height: 1.5;
 }
 
 .table-container {
@@ -124,9 +193,12 @@ td {
     color: #ddd;
 }
 
-#message {
-    margin: 20px 0;
-    color: #00ffff;
+.status-active {
+    color: #00ff88;
+}
+
+.status-inactive {
+    color: #ff7777;
 }
 
 @media(max-width: 500px) {
@@ -137,6 +209,10 @@ td {
 
     main {
         padding: 15px;
+    }
+
+    .form-container {
+        padding: 18px;
     }
 }
 </style>
@@ -152,6 +228,7 @@ td {
 <main>
 
     <h1>Dashboard Overview</h1>
+
     <p id="welcome">Checking administrator account...</p>
 
     <p id="message">Loading dashboard data...</p>
@@ -180,10 +257,84 @@ td {
 
     </div>
 
+    <!-- ADD NEW SERVICE -->
+
     <section>
+
+        <h2>Add New Service</h2>
+
+        <div class="form-container">
+
+            <form id="addServiceForm">
+
+                <div class="form-group">
+                    <label for="serviceName">Service Name</label>
+
+                    <input
+                        type="text"
+                        id="serviceName"
+                        placeholder="Enter service name"
+                        maxlength="150"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="serviceDescription">
+                        Service Description
+                    </label>
+
+                    <textarea
+                        id="serviceDescription"
+                        placeholder="Describe your service"
+                        rows="4"
+                        maxlength="2000"
+                    ></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="servicePrice">Price (RWF)</label>
+
+                    <input
+                        type="number"
+                        id="servicePrice"
+                        placeholder="Example: 50000"
+                        min="1"
+                        max="9007199254740991"
+                        step="1"
+                        required
+                    >
+                </div>
+
+                <label class="active-option">
+                    <input
+                        type="checkbox"
+                        id="serviceActive"
+                        checked
+                    >
+                    Active Service
+                </label>
+
+                <button type="submit" id="addServiceButton">
+                    Add Service
+                </button>
+
+                <p id="addServiceMessage"></p>
+
+            </form>
+
+        </div>
+
+    </section>
+
+    <!-- SERVICES TABLE -->
+
+    <section>
+
         <h2>Services</h2>
 
         <div class="table-container">
+
             <table>
                 <thead>
                     <tr>
@@ -193,17 +344,26 @@ td {
                         <th>Status</th>
                     </tr>
                 </thead>
+
                 <tbody id="servicesTable">
-                    <tr><td colspan="4">Loading services...</td></tr>
+                    <tr>
+                        <td colspan="4">Loading services...</td>
+                    </tr>
                 </tbody>
             </table>
+
         </div>
+
     </section>
 
+    <!-- CUSTOMER ORDERS -->
+
     <section>
+
         <h2>Customer Orders</h2>
 
         <div class="table-container">
+
             <table>
                 <thead>
                     <tr>
@@ -216,19 +376,27 @@ td {
                         <th>Status</th>
                     </tr>
                 </thead>
+
                 <tbody id="ordersTable">
-                    <tr><td colspan="7">Loading orders...</td></tr>
+                    <tr>
+                        <td colspan="7">Loading orders...</td>
+                    </tr>
                 </tbody>
             </table>
+
         </div>
+
     </section>
 
 </main>
 
 <script>
-const SUPABASE_URL = "https://wewwtcamaymmtylzodxn.supabase.co";
 
-const SUPABASE_KEY = "sb_publishable_irQEjAWhLlqDoVZIJAhnzQ_hLyOa8Qv";
+const SUPABASE_URL =
+"https://wewwtcamaymmtylzodxn.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_irQEjAWhLlqDoVZIJAhnzQ_hLyOa8Qv";
 
 const supabaseClient = window.supabase.createClient(
     SUPABASE_URL,
@@ -237,43 +405,104 @@ const supabaseClient = window.supabase.createClient(
 
 const message = document.getElementById("message");
 
+const addServiceForm =
+document.getElementById("addServiceForm");
+
+const addServiceButton =
+document.getElementById("addServiceButton");
+
+const addServiceMessage =
+document.getElementById("addServiceMessage");
+
+
 function safe(value) {
     const element = document.createElement("span");
+
     element.textContent = value ?? "";
+
     return element.innerHTML;
 }
 
-async function loadDashboard() {
-    try {
-        const { data: sessionData, error: sessionError } =
-            await supabaseClient.auth.getSession();
 
-        if (sessionError || !sessionData.session) {
-            window.location.replace("admin.html");
+function formatPrice(price) {
+    return Number(price).toLocaleString("en-US") + " RWF";
+}
+
+
+async function getAdminSession() {
+
+    const { data, error } =
+        await supabaseClient.auth.getSession();
+
+    if (error || !data.session) {
+
+        window.location.replace("admin.html");
+
+        return null;
+    }
+
+    return data.session;
+}
+
+
+// LOAD DASHBOARD DATA
+
+async function loadDashboard() {
+
+    try {
+
+        const session = await getAdminSession();
+
+        if (!session) {
             return;
         }
-
-        const session = sessionData.session;
 
         document.getElementById("welcome").textContent =
             "Welcome, " + (session.user.email || "Administrator");
 
+
         const response = await fetch("/api/admin-dashboard", {
+
+            method: "GET",
+
             headers: {
                 "Authorization": "Bearer " + session.access_token
             }
+
         });
+
 
         const result = await response.json();
 
-        if (response.status === 401 || response.status === 403) {
-            message.textContent = result.message || "Access denied.";
+
+        if (response.status === 401) {
+
+            await supabaseClient.auth.signOut();
+
+            window.location.replace("admin.html");
+
             return;
         }
 
-        if (!response.ok || !result.success) {
-            throw new Error(result.message || "Dashboard loading failed.");
+
+        if (response.status === 403) {
+
+            message.textContent =
+                "Access denied. Admin account required.";
+
+            return;
         }
+
+
+        if (!response.ok || !result.success) {
+
+            throw new Error(
+                result.message || "Dashboard loading failed."
+            );
+        }
+
+
+        // STATISTICS
 
         document.getElementById("totalServices").textContent =
             result.statistics.totalServices;
@@ -287,56 +516,254 @@ async function loadDashboard() {
         document.getElementById("paidOrders").textContent =
             result.statistics.paidOrders;
 
-        const servicesTable = document.getElementById("servicesTable");
+
+        // SERVICES TABLE
+
+        const servicesTable =
+            document.getElementById("servicesTable");
+
 
         if (!result.services.length) {
+
             servicesTable.innerHTML =
                 '<tr><td colspan="4">No services found.</td></tr>';
+
         } else {
-            servicesTable.innerHTML = result.services.map(service => `
-                <tr>
-                    <td>${safe(service.name)}</td>
-                    <td>${safe(service.description || "")}</td>
-                    <td>${Number(service.price_rwf).toLocaleString()} RWF</td>
-                    <td>${service.is_active ? "Active" : "Inactive"}</td>
-                </tr>
-            `).join("");
+
+            servicesTable.innerHTML =
+                result.services.map(service => `
+
+                    <tr>
+
+                        <td>${safe(service.name)}</td>
+
+                        <td>${safe(service.description || "")}</td>
+
+                        <td>${formatPrice(service.price_rwf)}</td>
+
+                        <td class="${service.is_active ? "status-active" : "status-inactive"}">
+                            ${service.is_active ? "Active" : "Inactive"}
+                        </td>
+
+                    </tr>
+
+                `).join("");
+
         }
 
-        const ordersTable = document.getElementById("ordersTable");
+
+        // CUSTOMER ORDERS TABLE
+
+        const ordersTable =
+            document.getElementById("ordersTable");
+
 
         if (!result.orders.length) {
+
             ordersTable.innerHTML =
                 '<tr><td colspan="7">No customer orders yet.</td></tr>';
+
         } else {
-            ordersTable.innerHTML = result.orders.map(order => `
-                <tr>
-                    <td>${safe(order.customer_name)}</td>
-                    <td>${safe(order.customer_email)}</td>
-                    <td>${safe(order.phone_number)}</td>
-                    <td>${safe(order.service_name)}</td>
-                    <td>${Number(order.amount_rwf).toLocaleString()} RWF</td>
-                    <td>${safe(order.payment_method)}</td>
-                    <td>${safe(order.payment_status)}</td>
-                </tr>
-            `).join("");
+
+            ordersTable.innerHTML =
+                result.orders.map(order => `
+
+                    <tr>
+
+                        <td>${safe(order.customer_name)}</td>
+
+                        <td>${safe(order.customer_email)}</td>
+
+                        <td>${safe(order.phone_number)}</td>
+
+                        <td>${safe(order.service_name)}</td>
+
+                        <td>${formatPrice(order.amount_rwf)}</td>
+
+                        <td>${safe(order.payment_method)}</td>
+
+                        <td>${safe(order.payment_status)}</td>
+
+                    </tr>
+
+                `).join("");
+
         }
 
-        message.textContent = "Dashboard loaded successfully.";
+
+        message.textContent =
+            "Dashboard loaded successfully.";
 
     } catch (error) {
-        console.error(error);
-        message.textContent = error.message ||
-            "Unable to load dashboard.";
+
+        console.error("Dashboard error:", error);
+
+        message.textContent =
+            error.message || "Unable to load dashboard.";
+
     }
+
 }
 
-document.getElementById("logoutButton").addEventListener("click", async () => {
-    await supabaseClient.auth.signOut();
-    window.location.replace("admin.html");
+
+// ADD NEW SERVICE
+
+addServiceForm.addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+
+    addServiceMessage.textContent = "";
+
+    addServiceButton.disabled = true;
+
+    addServiceButton.textContent = "Adding Service...";
+
+
+    try {
+
+        const session = await getAdminSession();
+
+        if (!session) {
+            return;
+        }
+
+
+        const serviceName =
+            document.getElementById("serviceName").value.trim();
+
+        const serviceDescription =
+            document.getElementById("serviceDescription").value.trim();
+
+        const servicePrice =
+            Number(document.getElementById("servicePrice").value);
+
+        const serviceActive =
+            document.getElementById("serviceActive").checked;
+
+
+        if (!serviceName || !Number.isSafeInteger(servicePrice) || servicePrice <= 0) {
+
+            throw new Error(
+                "Please enter a valid service name and price."
+            );
+
+        }
+
+
+        const serviceData = {
+
+            name: serviceName,
+
+            description: serviceDescription,
+
+            price_rwf: servicePrice,
+
+            is_active: serviceActive
+
+        };
+
+
+        const response = await fetch("/api/admin-services", {
+
+            method: "POST",
+
+            headers: {
+
+                "Content-Type": "application/json",
+
+                "Authorization": "Bearer " + session.access_token
+
+            },
+
+            body: JSON.stringify(serviceData)
+
+        });
+
+
+        const result = await response.json();
+
+
+        if (response.status === 401) {
+
+            await supabaseClient.auth.signOut();
+
+            window.location.replace("admin.html");
+
+            return;
+        }
+
+
+        if (!response.ok || !result.success) {
+
+            throw new Error(
+                result.message || "Unable to add service."
+            );
+
+        }
+
+
+        addServiceMessage.style.color = "#00ff88";
+
+        addServiceMessage.textContent =
+            "Service added successfully!";
+
+
+        addServiceForm.reset();
+
+        document.getElementById("serviceActive").checked = true;
+
+
+        // REFRESH DASHBOARD
+
+        await loadDashboard();
+
+
+    } catch (error) {
+
+        console.error("Add service error:", error);
+
+        addServiceMessage.style.color = "#ff7777";
+
+        addServiceMessage.textContent =
+            error.message || "Unable to add service.";
+
+    } finally {
+
+        addServiceButton.disabled = false;
+
+        addServiceButton.textContent = "Add Service";
+
+    }
+
 });
 
+
+// ADMIN LOGOUT
+
+document.getElementById("logoutButton").addEventListener(
+    "click",
+    async function() {
+
+        const { error } =
+            await supabaseClient.auth.signOut();
+
+        if (error) {
+
+            alert("Unable to logout. Please try again.");
+
+            return;
+        }
+
+        window.location.replace("admin.html");
+
+    }
+);
+
+
+// START DASHBOARD
+
 loadDashboard();
+
 </script>
 
 </body>
